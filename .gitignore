@@ -1,0 +1,48 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.cache
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environment variables / secrets
+.env
+*.env
+
+# macOS files
+.DS_Store
+
+# Windows thumbnails
+Thumbs.db
+ehthumbs.db
+
+# VSCode config
+.vscode/
+
+# Python virtual environments
+venv/
+env/
+ENV/
+.venv/
