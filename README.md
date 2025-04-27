@@ -1,107 +1,101 @@
-# 📄 CSV to Excel Converter with Embedded Gravatar Images
+# WordCamp Badge Generator
 
-This project is a simple GUI tool written in Python that:
-
-- Reads a CSV file
-- Extracts the 3rd, 4th, and 5th columns (Name, Last Name, and Email)
-- Capitalizes names and last names
-- Generates a SHA256-based Gravatar image for each email
-- Downloads and embeds the Gravatar image into an Excel (.xlsx) file
-- Saves the processed output, ready for tools like Canva Pro that require images to be embedded in cells
+A desktop application to process CSV files and generate Excel files with embedded Gravatar images, designed specifically for creating WordCamp badges and participant lists ready to import into Canva Pro.
 
 ---
 
-## 🖥️ Features
+## ✨ Features
 
-- User-friendly interface (no command line needed)
-- Embedded Gravatar images in Excel (not just links)
-- Compatible with **Windows** and **macOS**
-- Clean output ideal for graphic design platforms like Canva
-
----
-
-## 🧰 Requirements
-
-Before running the script or compiling, install dependencies:
-
-```bash
-pip install openpyxl requests pillow
-```
-
-If you plan to build the executable:
-
-```bash
-pip install pyinstaller
-```
-
----
-
-## ▶️ How to Run (Development Mode)
-
-Just run the script directly:
-
-```bash
-python gravatar_excel_gui.py
-```
-
-A window will pop up:
-1. Select your `.csv` file
-2. Choose where to save the resulting `.xlsx`
-
----
-
-## ⚙️ How to Build Executables
-
-### 🪟 Windows
-
-```bash
-pyinstaller --noconfirm --onefile --windowed gravatar_excel_gui.py
-```
-
-Output file:  
-`dist/gravatar_excel_gui.exe`
-
----
-
-### 🍏 macOS
-
-```bash
-pyinstaller --noconfirm --windowed gravatar_excel_gui.py
-```
-
-Output file:  
-`dist/gravatar_excel_gui.app`
-
-> Optional: Convert `.app` into a `.dmg` if needed using tools like `create-dmg`.
+- Read a CSV file with participant data.
+- Extract only name, surname, and email from the file.
+- Normalize names and surnames (capitalize correctly).
+- Generate Gravatar image URLs from email addresses.
+- Download the Gravatar images and embed them directly into Excel cells (500x500 px).
+- Real-time logging and progress bar during processing.
+- Simple desktop application with GUI (Tkinter).
+- Ready to export and import directly into Canva Pro.
 
 ---
 
 ## 📂 Project Structure
 
-```
-.
-├── gravatar_excel_gui.py       # Main script
+```bash
+WordCampBadgeGenerator/
+├── src/
+│   └── app.py
+├── icons/
+│   ├── icono.ico  # Windows icon
+│   └── icono.icns # Mac icon
+├── WordCampBadgeGenerator.spec
 ├── README.md
-└── requirements.txt            # Optional: pip freeze > requirements.txt
+└── .gitignore
 ```
+
+---
+
+## ⚙️ Requirements
+
+- Python 3.8+
+- Recommended: Use a virtual environment
+
+### Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+If you don't have `requirements.txt`, manually install:
+
+```bash
+pip install openpyxl requests pillow pyinstaller
+```
+
+---
+
+## 🚀 How to Run
+
+### Launch the application
+
+```bash
+python src/app.py
+```
+
+---
+
+## 🛠 How to Build Executable
+
+### Windows (.exe)
+
+```bash
+python -m pyinstaller WordCampBadgeGenerator.spec
+```
+
+Make sure you have `icono.ico` in the correct path.
+
+Output: `dist/WordCampBadgeGenerator/WordCampBadgeGenerator.exe`
+
+---
+
+### MacOS (.app)
+
+```bash
+python3 -m pyinstaller WordCampBadgeGenerator.spec
+```
+
+Make sure you have `icono.icns` in the correct path.
+
+Output: `dist/WordCampBadgeGenerator/WordCampBadgeGenerator.app`
 
 ---
 
 ## 📌 Notes
 
-- The app uses the standar attendee csv from camptix
-- Images are resized to 50x50 pixels inside the Excel file.
+- Windows requires `.ico` icons, MacOS requires `.icns` icons.
+- The app is platform-dependent: you must compile on the same OS you intend to run it.
+- The generated Excel file is immediately compatible with Canva Pro after this latest version.
 
 ---
 
-## 📥 Example camptix CSV Format
+## ❤️ Credits
 
-| Attendee ID | Ticket Type | First Name | Last Name  | E-mail Address   |
-|-------------|-------------|------------|------------|------------------|
-| 1234        | General     | john       | doe        | john@example.com |
-
----
-
-## 📃 License
-
-MIT License
+Created with ❤️ for the WordCamp community.
