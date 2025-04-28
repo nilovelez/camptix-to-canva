@@ -25,8 +25,8 @@ WordCampBadgeGenerator/
 │   ├── WordCampBadgeGenerator.py
 │   ├── WordCampBadgeGenerator.spec
 ├── └── assets/
-│       ├── icono.ico  # Windows icon
-│       └── icono.icns # Mac icon
+│       ├── icon.ico  # Windows icon
+│       └── icon.icns # Mac icon
 ├── .gitignore
 ├── build.bat
 ├── build.sh
