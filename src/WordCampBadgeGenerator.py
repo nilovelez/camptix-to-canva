@@ -16,7 +16,7 @@ def procesar_csv(csv_path, excel_path, log_callback, progress_callback):
     workbook = xlsxwriter.Workbook(excel_path)
     worksheet = workbook.add_worksheet("Procesado")
 
-    worksheet.write_row("A1", ["Nombre", "Apellidos", "Gravatar"])
+    worksheet.write_row("A1", ["First Name", "Last Name", "Gravatar"])
 
     imagenes_temporales = []
 
@@ -36,7 +36,7 @@ def procesar_csv(csv_path, excel_path, log_callback, progress_callback):
             apellidos = capitalizar(fila[3])
             email = fila[4].strip().lower()
 
-            log_callback(f"Procesando: {email}")
+            log_callback(f"Processing: {email}")
             progress_callback(i + 1, total_filas)
 
             hash_obj = hashlib.sha256(email.encode('utf-8'))
@@ -57,8 +57,8 @@ def procesar_csv(csv_path, excel_path, log_callback, progress_callback):
                 worksheet.insert_image(f"C{fila_excel}", img_path, {"x_scale": 1.0, "y_scale": 1.0, "x_offset": 2, "y_offset": 2, "positioning": 1})
 
             except Exception as e:
-                log_callback(f"Error al procesar {email}: {str(e)}")
-                worksheet.write(f"C{fila_excel}", "(Error al descargar imagen)")
+                log_callback(f"Error processing {email}: {str(e)}")
+                worksheet.write(f"C{fila_excel}", "(Error downloading image)")
 
     workbook.close()
 
@@ -66,7 +66,7 @@ def procesar_csv(csv_path, excel_path, log_callback, progress_callback):
         try:
             os.remove(img_path)
         except Exception as e:
-            log_callback(f"No se pudo borrar {img_path}: {str(e)}")
+            log_callback(f"Coudn't delete {img_path}: {str(e)}")
 
 # GUI
 
@@ -98,7 +98,7 @@ def ejecutar():
                 progress_bar.after(0, lambda: progress_bar.config(value=percent))
 
             procesar_csv(csv_path, excel_path, safe_log, update_progress)
-            log_area.after(0, lambda: messagebox.showinfo("Éxito", f"Archivo guardado en:\n{excel_path}"))
+            log_area.after(0, lambda: messagebox.showinfo("Success!!", f"File saved in:\n{excel_path}"))
         except Exception as e:
             log_area.after(0, lambda: messagebox.showerror("Error", str(e)))
         finally:
@@ -106,14 +106,32 @@ def ejecutar():
 
     threading.Thread(target=run_proceso).start()
 
+# Configuración ventana principal
 root = tk.Tk()
-root.title("CSV to Excel with Gravatar")
-root.geometry("600x450")
+root.title("WordCamp Badge Generator")
+root.geometry("600x500")
 
 frame = tk.Frame(root)
 frame.pack(pady=10)
 
-btn = tk.Button(frame, text="Seleccionar CSV y Procesar", command=ejecutar)
+# Instrucciones
+label_bold = tk.Label(
+    frame,
+    text="Download the attendees file from your WordCamp site.",
+    justify="left",
+    font=("Helvetica", 10, "bold")
+)
+label_bold.pack(anchor="w", padx=20)
+
+label_normal = tk.Label(
+    frame,
+    text="Go to Tickets > Tools > Generate Badges > Create Badges with InDesign",
+    justify="left",
+    font=("Helvetica", 10)
+)
+label_normal.pack(anchor="w", padx=20, pady=(0, 10))
+
+btn = tk.Button(frame, text="Select Attendee CSV file", command=ejecutar)
 btn.pack()
 
 progress_bar = ttk.Progressbar(root, orient="horizontal", length=500, mode="determinate")
@@ -123,3 +141,4 @@ log_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=70, height=18)
 log_area.pack(padx=10, pady=10)
 
 root.mainloop()
+
