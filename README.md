@@ -52,7 +52,29 @@ pip install -r requirements.txt
 
 ## 🚀 How to Run
 
-### Launch the application
+### Using a Virtual Environment (Recommended)
+
+```bash
+# Create a virtual environment
+python -m venv venv
+
+# Activate the virtual environment
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the application
+python src/WordCampBadgeGenerator.py
+
+# When finished, deactivate the virtual environment
+deactivate
+```
+
+### Launch the application (without virtual environment)
 
 ```bash
 python src/WordCampBadgeGenerator.py
