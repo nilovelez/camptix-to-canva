@@ -109,7 +109,7 @@ def ejecutar():
 # Configuración ventana principal
 root = tk.Tk()
 root.title("WordCamp Badge Generator")
-root.geometry("600x500")
+root.geometry("540x400")
 
 frame = tk.Frame(root)
 frame.pack(pady=10)
@@ -135,9 +135,9 @@ btn = tk.Button(frame, text="Select Attendee CSV file", command=ejecutar)
 btn.pack()
 
 progress_bar = ttk.Progressbar(root, orient="horizontal", length=500, mode="determinate")
-progress_bar.pack(pady=10)
+progress_bar.pack(padx=(0, 20), pady=10)
 
-log_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=70, height=18)
+log_area = scrolledtext.ScrolledText(root, wrap=tk.WORD, width=70, height=14)
 log_area.pack(padx=10, pady=10)
 
 root.mainloop()
