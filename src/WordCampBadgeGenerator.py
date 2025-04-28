@@ -18,8 +18,6 @@ def procesar_csv(csv_path, excel_path, log_callback, progress_callback):
 
     worksheet.write_row("A1", ["First Name", "Last Name", "Gravatar"])
 
-    imagenes_temporales = []
-
     with open(csv_path, newline='', encoding='utf-8') as csvfile:
         reader = list(csv.reader(csvfile))
         total_filas = len(reader) - 1
@@ -50,23 +48,17 @@ def procesar_csv(csv_path, excel_path, log_callback, progress_callback):
                 response = requests.get(gravatar_url, timeout=10)
                 response.raise_for_status()
                 img = Image.open(BytesIO(response.content)).convert("RGB")
-                img_path = f"temp_avatar_{i}.png"
+                img_path = "temp_avatar.png"
                 img.save(img_path)
-                imagenes_temporales.append(img_path)
-
                 worksheet.insert_image(f"C{fila_excel}", img_path, {"x_scale": 1.0, "y_scale": 1.0, "x_offset": 2, "y_offset": 2, "positioning": 1})
+                try:
+                    os.remove(img_path)
+                except Exception as e:
+                    log_callback(f"Couldn't delete {img_path}: {str(e)}")
 
             except Exception as e:
                 log_callback(f"Error processing {email}: {str(e)}")
                 worksheet.write(f"C{fila_excel}", "(Error downloading image)")
-
-    workbook.close()
-
-    for img_path in imagenes_temporales:
-        try:
-            os.remove(img_path)
-        except Exception as e:
-            log_callback(f"Coudn't delete {img_path}: {str(e)}")
 
 # GUI
 
