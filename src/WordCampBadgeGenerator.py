@@ -103,28 +103,42 @@ root = tk.Tk()
 root.title("WordCamp Badge Generator")
 root.geometry("540x400")
 
+# Establecer el icono de la ventana
+try:
+    # Intentar cargar el icono desde la ruta relativa
+    icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "icon.ico")
+    if os.path.exists(icon_path):
+        root.iconbitmap(icon_path)
+    else:
+        # Si no se encuentra, intentar cargar desde la ruta absoluta
+        root.iconbitmap("src/assets/icon.ico")
+except Exception as e:
+    print(f"No se pudo cargar el icono: {e}")
+
 frame = tk.Frame(root)
-frame.pack(pady=10)
+frame.pack(pady=10, fill=tk.X, padx=20)
 
 # Instrucciones
 label_bold = tk.Label(
     frame,
-    text="Download the attendees file from your WordCamp site.",
+    text="1. Download the attendees file from your WordCamp site.",
     justify="left",
-    font=("Helvetica", 10, "bold")
+    font=("Helvetica", 10, "bold"),
+    wraplength=500
 )
-label_bold.pack(anchor="w", padx=20)
+label_bold.pack(anchor="w", fill=tk.X, pady=(0, 5))
 
 label_normal = tk.Label(
     frame,
     text="Go to Tickets > Tools > Generate Badges > Create Badges with InDesign",
     justify="left",
-    font=("Helvetica", 10)
+    font=("Helvetica", 10),
+    wraplength=500
 )
-label_normal.pack(anchor="w", padx=20, pady=(0, 10))
+label_normal.pack(anchor="w", fill=tk.X, pady=(0, 10))
 
-btn = tk.Button(frame, text="Select Attendee CSV file", command=ejecutar)
-btn.pack()
+btn = tk.Button(frame, text="2. Select Attendee CSV file", command=ejecutar)
+btn.pack(pady=10)
 
 progress_bar = ttk.Progressbar(root, orient="horizontal", length=500, mode="determinate")
 progress_bar.pack(padx=(0, 20), pady=10)
