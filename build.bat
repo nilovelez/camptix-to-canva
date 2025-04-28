@@ -8,7 +8,7 @@ rmdir /s /q __pycache__
 
 REM Compilation
 echo Compiling...
-pyinstaller WordCampBadgeGenerator.spec
+pyinstaller src/WordCampBadgeGenerator.spec
 
 REM End
 echo Compilation complete

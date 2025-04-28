@@ -23,6 +23,7 @@ A desktop application to process WordCamp attendee CSV files and generate Excel 
 WordCampBadgeGenerator/
 ├── src/
 │   ├── WordCampBadgeGenerator.py
+│   ├── WordCampBadgeGenerator.spec
 ├── └── assets/
 │       ├── icono.ico  # Windows icon
 │       └── icono.icns # Mac icon
@@ -31,8 +32,7 @@ WordCampBadgeGenerator/
 ├── build.sh
 ├── LICENSE
 ├── README.md
-├── requirements.txt
-└── WordCampBadgeGenerator.spec
+└── requirements.txt
 ```
 
 ---
@@ -65,7 +65,7 @@ python src/WordCampBadgeGenerator.py
 ### Windows (.exe)
 
 ```bash
-python -m pyinstaller WordCampBadgeGenerator.spec
+python -m pyinstaller src/WordCampBadgeGenerator.spec
 ```
 
 Make sure you have `icono.ico` in the correct path.
@@ -77,7 +77,7 @@ Output: `dist/WordCampBadgeGenerator.exe`
 ### MacOS (.app)
 
 ```bash
-python3 -m pyinstaller WordCampBadgeGenerator.spec
+python3 -m pyinstaller src/WordCampBadgeGenerator.spec
 ```
 
 Make sure you have `icono.icns` in the correct path.

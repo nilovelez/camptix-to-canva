@@ -6,7 +6,7 @@ rm -rf build dist __pycache__
 
 # Compilation
 echo "Compiling..."
-pyinstaller WordCampBadgeGenerator.spec
+pyinstaller src/WordCampBadgeGenerator.spec
 
 # End
 echo "Compilation complete"
