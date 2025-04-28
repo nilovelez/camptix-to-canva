@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Limpieza previa
-echo "Limpiando directorios previos..."
+# Clean up
+echo "Preliminary directory clean up..."
 rm -rf build dist __pycache__
 
-# Compilación
-echo "Compilando..."
+# Compilation
+echo "Compiling..."
 pyinstaller WordCampBadgeGenerator.spec
 
-# Fin
-echo "¡Compilación terminada!"
+# End
+echo "Compilation complete"

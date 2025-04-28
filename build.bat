@@ -1,15 +1,15 @@
 @echo off
 
-REM Limpieza previa
-echo Limpiando directorios previos...
+REM Clean up
+echo Preliminary directory clean up...
 rmdir /s /q build
 rmdir /s /q dist
 rmdir /s /q __pycache__
 
-REM Compilación
-echo Compilando...
+REM Compilation
+echo Compiling...
 pyinstaller WordCampBadgeGenerator.spec
 
-REM Fin
-echo ¡Compilación terminada!
+REM End
+echo Compilation complete
 pause
