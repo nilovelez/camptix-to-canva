@@ -1,12 +1,12 @@
 # WordCamp Badge Generator
 
-A desktop application to process CSV files and generate Excel files with embedded Gravatar images, designed specifically for creating WordCamp badges and participant lists ready to import into Canva Pro.
+A desktop application to process WordCamp attendee CSV files and generate Excel files with embedded Gravatar images, designed specifically for creating WordCamp badges and participant lists ready to import into Canva Pro.
 
 ---
 
 ## ✨ Features
 
-- Read a CSV file with participant data.
+- Read a WordCamp site CSV attendee file.
 - Extract only name, surname, and email from the file.
 - Normalize names and surnames (capitalize correctly).
 - Generate Gravatar image URLs from email addresses.
@@ -22,13 +22,17 @@ A desktop application to process CSV files and generate Excel files with embedde
 ```bash
 WordCampBadgeGenerator/
 ├── src/
-│   └── app.py
-├── icons/
-│   ├── icono.ico  # Windows icon
-│   └── icono.icns # Mac icon
-├── WordCampBadgeGenerator.spec
+│   ├── WordCampBadgeGenerator.py
+├── └── assets/
+│       ├── icono.ico  # Windows icon
+│       └── icono.icns # Mac icon
+├── .gitignore
+├── build.bat
+├── build.sh
+├── LICENSE
 ├── README.md
-└── .gitignore
+├── requirements.txt
+└── WordCampBadgeGenerator.spec
 ```
 
 ---
@@ -44,12 +48,6 @@ WordCampBadgeGenerator/
 pip install -r requirements.txt
 ```
 
-If you don't have `requirements.txt`, manually install:
-
-```bash
-pip install openpyxl requests pillow pyinstaller
-```
-
 ---
 
 ## 🚀 How to Run
@@ -57,7 +55,7 @@ pip install openpyxl requests pillow pyinstaller
 ### Launch the application
 
 ```bash
-python src/app.py
+python src/WordCampBadgeGenerator.py
 ```
 
 ---
@@ -72,7 +70,7 @@ python -m pyinstaller WordCampBadgeGenerator.spec
 
 Make sure you have `icono.ico` in the correct path.
 
-Output: `dist/WordCampBadgeGenerator/WordCampBadgeGenerator.exe`
+Output: `dist/WordCampBadgeGenerator.exe`
 
 ---
 
@@ -84,13 +82,12 @@ python3 -m pyinstaller WordCampBadgeGenerator.spec
 
 Make sure you have `icono.icns` in the correct path.
 
-Output: `dist/WordCampBadgeGenerator/WordCampBadgeGenerator.app`
+Output: `dist/WordCampBadgeGenerator.app`
 
 ---
 
 ## 📌 Notes
 
-- Windows requires `.ico` icons, MacOS requires `.icns` icons.
 - The app is platform-dependent: you must compile on the same OS you intend to run it.
 - The generated Excel file is immediately compatible with Canva Pro after this latest version.
 
