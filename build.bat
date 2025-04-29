@@ -17,8 +17,8 @@ pip install -r requirements.txt
 REM Clean up
 echo Preliminary directory clean up...
 rmdir /s /q build
-rmdir /s /q dist
 rmdir /s /q __pycache__
+rmdir /s /q dist\WordCampBadgeGenerator
 
 REM Compilation
 echo Compiling...
