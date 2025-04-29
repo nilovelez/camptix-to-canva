@@ -8,6 +8,7 @@ from io import BytesIO
 import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext, ttk
 import threading
+import qrcode
 
 def capitalizar(texto):
     return ' '.join([palabra.capitalize() for palabra in texto.strip().lower().split()])
@@ -46,7 +47,7 @@ def procesar_csv(csv_path, excel_path, log_callback, progress_callback):
                 hash_obj = hashlib.sha256(email.encode('utf-8'))
                 gravatar_hash = hash_obj.hexdigest()
                 gravatar_url = f"http://www.gravatar.com/avatar/{gravatar_hash}.png?s=500&default=mp"
-                gravatar_profile_url = f"https://api.gravatar.com/v3/qr-code/{gravatar_hash}?version=1&type=blank&size=500"
+                gravatar_profile_url = f"https://gravatar.com/{gravatar_hash}?utm_source=qr"
 
                 worksheet.write(f"A{fila_excel}", nombre, cell_format)
                 worksheet.write(f"B{fila_excel}", apellidos, cell_format)
@@ -61,15 +62,27 @@ def procesar_csv(csv_path, excel_path, log_callback, progress_callback):
                     log_callback(f"Error processing Gravatar for {email}: {str(e)}")
                     worksheet.write(f"C{fila_excel}", "(Error downloading image)", cell_format)
 
-                # Procesar código QR de Gravatar
+                # Generar código QR localmente
                 try:
-                    response = requests.get(gravatar_profile_url, timeout=10)
-                    response.raise_for_status()
-                    img_data = BytesIO(response.content)
-                    worksheet.insert_image(f"D{fila_excel}", img_data, {"x_scale": 1.0, "y_scale": 1.0, "x_offset": 2, "y_offset": 2, "positioning": 1})
+                    qr = qrcode.QRCode(
+                        version=1,
+                        error_correction=qrcode.constants.ERROR_CORRECT_L,
+                        box_size=10,
+                        border=4,
+                    )
+                    qr.add_data(gravatar_profile_url)
+                    qr.make(fit=True)
+                    qr_img = qr.make_image(fill_color="black", back_color="white")
+                    
+                    # Convertir la imagen a BytesIO
+                    img_buffer = BytesIO()
+                    qr_img.save(img_buffer, format='PNG')
+                    img_buffer.seek(0)
+                    
+                    worksheet.insert_image(f"D{fila_excel}", img_buffer, {"x_scale": 1.0, "y_scale": 1.0, "x_offset": 2, "y_offset": 2, "positioning": 1})
                 except Exception as e:
-                    log_callback(f"Error processing QR for {email}: {str(e)}")
-                    worksheet.write(f"D{fila_excel}", "(Error downloading QR)", cell_format)
+                    log_callback(f"Error generating QR for {email}: {str(e)}")
+                    worksheet.write(f"D{fila_excel}", "(Error generating QR)", cell_format)
 
         # Ajustar el ancho de las columnas
         worksheet.set_column('A:A', 20)

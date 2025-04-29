@@ -1,6 +1,6 @@
 # WordCamp Badge Generator
 
-A desktop application to process WordCamp attendee CSV files and generate Excel files with embedded Gravatar images, designed specifically for creating WordCamp badges and participant lists ready to import into Canva Pro.
+A desktop application to process WordCamp attendee CSV files and generate Excel files with embedded Gravatar images and QR codes, designed specifically for creating WordCamp badges and participant lists ready to import into Canva Pro.
 
 ---
 
@@ -11,6 +11,7 @@ A desktop application to process WordCamp attendee CSV files and generate Excel 
 - Normalize names and surnames (capitalize correctly).
 - Generate Gravatar image URLs from email addresses.
 - Download the Gravatar images and embed them directly into Excel cells (500x500 px).
+- Generate QR codes linking to each attendee's Gravatar profile.
 - Real-time logging and progress bar during processing.
 - Simple desktop application with GUI (Tkinter).
 - Ready to export and import directly into Canva Pro.
@@ -41,6 +42,13 @@ WordCampBadgeGenerator/
 
 - Python 3.8+
 - Recommended: Use a virtual environment
+- Dependencies (from requirements.txt):
+  - pillow
+  - requests
+  - openpyxl
+  - pyinstaller
+  - xlsxwriter
+  - qrcode
 
 ### Install dependencies
 
@@ -112,6 +120,10 @@ Output: `dist/WordCampBadgeGenerator.app`
 
 - The app is platform-dependent: you must compile on the same OS you intend to run it.
 - The generated Excel file is immediately compatible with Canva Pro after this latest version.
+- Gravatar images are automatically downloaded using attendee email addresses.
+- QR codes link to each attendee's public Gravatar profile.
+- Processing time may vary depending on the number of attendees.
+- Real-time progress is shown during processing.
 
 ---
 

@@ -3,3 +3,4 @@ requests
 openpyxl
 pyinstaller
 xlsxwriter
+qrcode
