@@ -13,52 +13,77 @@ def capitalizar(texto):
     return ' '.join([palabra.capitalize() for palabra in texto.strip().lower().split()])
 
 def procesar_csv(csv_path, excel_path, log_callback, progress_callback):
-    workbook = xlsxwriter.Workbook(excel_path)
-    worksheet = workbook.add_worksheet("Procesado")
+    try:
+        workbook = xlsxwriter.Workbook(excel_path)
+        worksheet = workbook.add_worksheet("Procesado")
 
-    worksheet.write_row("A1", ["First Name", "Last Name", "Gravatar"])
+        # Configurar el formato de las celdas
+        header_format = workbook.add_format({'bold': True, 'align': 'center', 'valign': 'vcenter'})
+        cell_format = workbook.add_format({'align': 'left', 'valign': 'vcenter'})
 
-    with open(csv_path, newline='', encoding='utf-8') as csvfile:
-        reader = list(csv.reader(csvfile))
-        total_filas = len(reader) - 1
-        reader = iter(reader)
-        next(reader)  # saltar cabecera
+        # Escribir las cabeceras
+        worksheet.write_row("A1", ["First Name", "Last Name", "Gravatar", "QR Gravatar"], header_format)
 
-        for i, fila in enumerate(reader):
-            fila_excel = i + 1 + 1  # +1 por 0-index y +1 por cabecera
+        with open(csv_path, newline='', encoding='utf-8') as csvfile:
+            reader = list(csv.reader(csvfile))
+            total_filas = len(reader) - 1
+            reader = iter(reader)
+            next(reader)  # saltar cabecera
 
-            if len(fila) < 5:
-                continue
+            for i, fila in enumerate(reader):
+                fila_excel = i + 1 + 1  # +1 por 0-index y +1 por cabecera
 
-            nombre = capitalizar(fila[2])
-            apellidos = capitalizar(fila[3])
-            email = fila[4].strip().lower()
+                if len(fila) < 5:
+                    continue
 
-            log_callback(f"Processing: {email}")
-            progress_callback(i + 1, total_filas)
+                nombre = capitalizar(fila[2])
+                apellidos = capitalizar(fila[3])
+                email = fila[4].strip().lower()
 
-            hash_obj = hashlib.sha256(email.encode('utf-8'))
-            gravatar_hash = hash_obj.hexdigest()
-            gravatar_url = f"http://www.gravatar.com/avatar/{gravatar_hash}.png?s=500&default=mp"
+                log_callback(f"Processing: {email}")
+                progress_callback(i + 1, total_filas)
 
-            worksheet.write(f"A{fila_excel}", nombre)
-            worksheet.write(f"B{fila_excel}", apellidos)
+                hash_obj = hashlib.sha256(email.encode('utf-8'))
+                gravatar_hash = hash_obj.hexdigest()
+                gravatar_url = f"http://www.gravatar.com/avatar/{gravatar_hash}.png?s=500&default=mp"
+                gravatar_profile_url = f"https://api.gravatar.com/v3/qr-code/{gravatar_hash}?version=1&type=blank&size=500"
 
-            try:
-                response = requests.get(gravatar_url, timeout=10)
-                response.raise_for_status()
-                img = Image.open(BytesIO(response.content)).convert("RGB")
-                img_path = "temp_avatar.png"
-                img.save(img_path)
-                worksheet.insert_image(f"C{fila_excel}", img_path, {"x_scale": 1.0, "y_scale": 1.0, "x_offset": 2, "y_offset": 2, "positioning": 1})
+                worksheet.write(f"A{fila_excel}", nombre, cell_format)
+                worksheet.write(f"B{fila_excel}", apellidos, cell_format)
+
+                # Procesar imagen de Gravatar
                 try:
-                    os.remove(img_path)
+                    response = requests.get(gravatar_url, timeout=10)
+                    response.raise_for_status()
+                    img_data = BytesIO(response.content)
+                    worksheet.insert_image(f"C{fila_excel}", img_data, {"x_scale": 1.0, "y_scale": 1.0, "x_offset": 2, "y_offset": 2, "positioning": 1})
                 except Exception as e:
-                    log_callback(f"Couldn't delete {img_path}: {str(e)}")
+                    log_callback(f"Error processing Gravatar for {email}: {str(e)}")
+                    worksheet.write(f"C{fila_excel}", "(Error downloading image)", cell_format)
 
-            except Exception as e:
-                log_callback(f"Error processing {email}: {str(e)}")
-                worksheet.write(f"C{fila_excel}", "(Error downloading image)")
+                # Procesar código QR de Gravatar
+                try:
+                    response = requests.get(gravatar_profile_url, timeout=10)
+                    response.raise_for_status()
+                    img_data = BytesIO(response.content)
+                    worksheet.insert_image(f"D{fila_excel}", img_data, {"x_scale": 1.0, "y_scale": 1.0, "x_offset": 2, "y_offset": 2, "positioning": 1})
+                except Exception as e:
+                    log_callback(f"Error processing QR for {email}: {str(e)}")
+                    worksheet.write(f"D{fila_excel}", "(Error downloading QR)", cell_format)
+
+        # Ajustar el ancho de las columnas
+        worksheet.set_column('A:A', 20)
+        worksheet.set_column('B:B', 20)
+        worksheet.set_column('C:D', 15)
+
+        # Cerrar el workbook
+        workbook.close()
+        
+        log_callback(f"Excel file saved successfully: {excel_path}")
+        return True
+    except Exception as e:
+        log_callback(f"Error creating Excel file: {str(e)}")
+        return False
 
 # GUI
 
@@ -89,8 +114,11 @@ def ejecutar():
                 percent = int((current / total) * 100)
                 progress_bar.after(0, lambda: progress_bar.config(value=percent))
 
-            procesar_csv(csv_path, excel_path, safe_log, update_progress)
-            log_area.after(0, lambda: messagebox.showinfo("Success!!", f"File saved in:\n{excel_path}"))
+            success = procesar_csv(csv_path, excel_path, safe_log, update_progress)
+            if success:
+                log_area.after(0, lambda: messagebox.showinfo("Success!!", f"File saved in:\n{excel_path}"))
+            else:
+                log_area.after(0, lambda: messagebox.showerror("Error", "Failed to create Excel file. Check the log for details."))
         except Exception as e:
             log_area.after(0, lambda: messagebox.showerror("Error", str(e)))
         finally:
