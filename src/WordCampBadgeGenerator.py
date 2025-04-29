@@ -47,7 +47,7 @@ def procesar_csv(csv_path, excel_path, log_callback, progress_callback):
 
                 hash_obj = hashlib.sha256(email.encode('utf-8'))
                 gravatar_hash = hash_obj.hexdigest()
-                gravatar_url = f"http://www.gravatar.com/avatar/{gravatar_hash}.png?s=500&default=mp"
+                gravatar_url = f"http://www.gravatar.com/avatar/{gravatar_hash}.png?s=500&default=404"
                 gravatar_profile_url = f"https://gravatar.com/{gravatar_hash}?utm_source=qr"
 
                 worksheet.write(f"A{fila_excel}", nombre, cell_format)
@@ -56,12 +56,15 @@ def procesar_csv(csv_path, excel_path, log_callback, progress_callback):
                 # Procesar imagen de Gravatar
                 try:
                     response = requests.get(gravatar_url, timeout=10)
-                    response.raise_for_status()
-                    img_data = BytesIO(response.content)
-                    worksheet.insert_image(f"C{fila_excel}", img_data, {"x_scale": 1.0, "y_scale": 1.0, "x_offset": 2, "y_offset": 2, "positioning": 1})
+                    if response.status_code == 404:
+                        # Si el usuario no tiene Gravatar, no añadimos nada a la tercera columna
+                        log_callback(f"No Gravatar found for {email}")
+                    else:
+                        response.raise_for_status()
+                        img_data = BytesIO(response.content)
+                        worksheet.insert_image(f"C{fila_excel}", img_data, {"x_scale": 1.0, "y_scale": 1.0, "x_offset": 2, "y_offset": 2, "positioning": 1})
                 except Exception as e:
                     log_callback(f"Error processing Gravatar for {email}: {str(e)}")
-                    worksheet.write(f"C{fila_excel}", "(Error downloading image)", cell_format)
 
                 # Generar código QR localmente
                 try:
