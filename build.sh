@@ -16,7 +16,7 @@ pip install -r requirements.txt
 
 # Clean up
 echo "Preliminary directory clean up..."
-rm -rf build dist __pycache__
+rm -rf build dist __pycache__ src/WordCampBadgeGenerator
 
 # Compilation
 echo "Compiling..."
