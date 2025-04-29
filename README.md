@@ -49,6 +49,29 @@ WordCampBadgeGenerator/
   - pyinstaller
   - xlsxwriter
   - qrcode
+  - tkinter
+
+### Installing Tkinter
+
+#### Windows
+Tkinter usually comes included with the standard Python installation. However, if it's not installed:
+
+1. Download Python from [python.org](https://www.python.org/downloads/)
+2. During installation, make sure to check the "tcl/tk and IDLE" box
+3. Alternatively, you can install it using:
+```bash
+python -m pip install tk
+```
+
+#### macOS
+Tkinter comes included with Python on macOS. If you need to install it manually:
+
+1. Using Homebrew:
+```bash
+brew install python-tk
+```
+
+2. Or using the Python installer from [python.org](https://www.python.org/downloads/)
 
 ### Install dependencies
 
@@ -98,7 +121,7 @@ python src/WordCampBadgeGenerator.py
 python -m pyinstaller src/WordCampBadgeGenerator.spec
 ```
 
-Make sure you have `icono.ico` in the correct path.
+Make sure you have `icon.ico` in the correct path.
 
 Output: `dist/WordCampBadgeGenerator.exe`
 
@@ -106,11 +129,17 @@ Output: `dist/WordCampBadgeGenerator.exe`
 
 ### MacOS (.app)
 
+Before building, ensure PyInstaller is installed:
 ```bash
-python3 -m pyinstaller src/WordCampBadgeGenerator.spec
+pip install pyinstaller
 ```
 
-Make sure you have `icono.icns` in the correct path.
+Then run:
+```bash
+python3 -m PyInstaller src/WordCampBadgeGenerator.spec
+```
+
+Make sure you have `icon.icns` in the correct path.
 
 Output: `dist/WordCampBadgeGenerator.app`
 
@@ -129,4 +158,4 @@ Output: `dist/WordCampBadgeGenerator.app`
 
 ## ❤️ Credits
 
-Created with ❤️ for the WordCamp community.
+Created with ❤️ by for the WordCamp community.

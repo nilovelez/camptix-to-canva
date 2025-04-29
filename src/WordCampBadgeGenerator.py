@@ -9,6 +9,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, scrolledtext, ttk
 import threading
 import qrcode
+import platform
 
 def capitalizar(texto):
     return ' '.join([palabra.capitalize() for palabra in texto.strip().lower().split()])
@@ -144,17 +145,30 @@ root = tk.Tk()
 root.title("WordCamp Badge Generator")
 root.geometry("540x400")
 
-# Establecer el icono de la ventana
-try:
-    # Intentar cargar el icono desde la ruta relativa
-    icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "icon.ico")
-    if os.path.exists(icon_path):
-        root.iconbitmap(icon_path)
-    else:
-        # Si no se encuentra, intentar cargar desde la ruta absoluta
-        root.iconbitmap("src/assets/icon.ico")
-except Exception as e:
-    print(f"No se pudo cargar el icono: {e}")
+# Configuración específica para macOS
+if platform.system() == 'Darwin':
+    root.createcommand('tk::mac::ReopenApplication', root.lift)
+    root.createcommand('tk::mac::Quit', root.quit)
+    # Configurar el icono para macOS
+    try:
+        icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "icon.icns")
+        if os.path.exists(icon_path):
+            root.iconbitmap(icon_path)
+    except Exception as e:
+        print(f"No se pudo cargar el icono de macOS: {e}")
+else:
+    # Configurar el icono para Windows
+    try:
+        icon_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "icon.ico")
+        if os.path.exists(icon_path):
+            root.iconbitmap(icon_path)
+    except Exception as e:
+        print(f"No se pudo cargar el icono de Windows: {e}")
+
+# Asegurar que la ventana esté en primer plano
+root.lift()
+root.attributes('-topmost', True)
+root.after_idle(root.attributes, '-topmost', False)
 
 frame = tk.Frame(root)
 frame.pack(pady=10, fill=tk.X, padx=20)
