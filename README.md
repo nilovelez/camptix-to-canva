@@ -118,7 +118,8 @@ python src/WordCampBadgeGenerator.py
 ### Windows (.exe)
 
 ```bash
-python -m pyinstaller src/WordCampBadgeGenerator.spec
+# Run the build script
+build.bat
 ```
 
 Make sure you have `icon.ico` in the correct path.
@@ -129,14 +130,12 @@ Output: `dist/WordCampBadgeGenerator.exe`
 
 ### MacOS (.app)
 
-Before building, ensure PyInstaller is installed:
 ```bash
-pip install pyinstaller
-```
+# Make the build script executable
+chmod +x build.sh
 
-Then run:
-```bash
-python3 -m PyInstaller src/WordCampBadgeGenerator.spec
+# Run the build script
+./build.sh
 ```
 
 Make sure you have `icon.icns` in the correct path.
